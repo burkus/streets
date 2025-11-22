@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useRef } from "react";
 import * as THREE from 'three'
 import { CameraControls, Html } from "@react-three/drei";
-import { MenuItemText } from "../components/styles.ts";
+import { List, MenuItemText } from "../components/styles.ts";
 
 const isLight = (obj: any): obj is THREE.Light => obj.isLight
 
@@ -29,41 +29,25 @@ const Scene = () => {
   )
 }
 
-const MenuItem = ({ children, ...props }: { children: React.ReactNode } & React.ComponentProps<typeof Html>) => {
-  return (
-    <Html
-      {...props}
-      occlude
-      transform
-      style={{ borderRadius: '10px', padding: '8px', background: 'transparent' }}
-    >
-      {children}
-    </Html>
-  )
-}
-
 const Component = () => {
 
   return (
     <Canvas
       style={{ width: '100vw', height: '100vh' }}
-      camera={{ position: [0, 0, 20] }}
+      camera={{ position: [0, 0, 5] }}
       shadows='basic'
     >
       {/* <fog attach="fog" args={['black', 5, 30]} /> */}
       <color attach="background" args={['black']} />
       <Scene />
       <CameraControls />
-      <group>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <MenuItem
-            position={[-2, 7 - i, -5]}
-            key={i}
-          >
+      <Html occlude transform position={[-2, 5, -5]}>
+        <List>
+          {Array.from({ length: 5 }).map((_, i) => (
             <MenuItemText>Menu Item {i + 1}</MenuItemText>
-          </MenuItem>
-        ))}
-      </group>
+          ))}
+        </List>
+      </Html>
     </Canvas>
   )
 }

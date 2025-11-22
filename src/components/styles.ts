@@ -21,10 +21,13 @@ export const ListItem = styled.div`
 
 export const MenuItemText = styled.div`
     font-family: "Saira Stencil One", sans-serif;
-    font-size: 30px;
-    transition: all 0.2s ease-in-out;
+    font-size: 24px;
+    transition: all 0.3s ease-in-out;
     color: white;
-    font-wweight: bold;
+    font-weight: bold;
+    padding: 4px 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
     &:hover {
         text-decoration: underline;
         transform: scale(1.05);
