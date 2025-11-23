@@ -30,7 +30,6 @@ const Scene = () => {
 }
 
 const Component = () => {
-
   return (
     <Canvas
       style={{ width: '100vw', height: '100vh' }}
