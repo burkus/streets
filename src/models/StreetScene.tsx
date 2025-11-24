@@ -4,9 +4,11 @@ Command: npx gltfjsx@6.5.3 public/street_scene.glb -t -o src/models/StreetScene.
 */
 
 import * as THREE from 'three'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useGLTF, PerspectiveCamera, useAnimations } from '@react-three/drei'
 import { type GLTF } from 'three-stdlib'
+import { Float, Text } from '@react-three/drei'
+import Label from '../components/Label'
 
 type ActionName = 'SpotAction' | 'SpotAction2'
 
@@ -16,25 +18,31 @@ interface GLTFAction extends THREE.AnimationClip {
 
 type GLTFResult = GLTF & {
   nodes: {
+    Cube004: THREE.Mesh
+    Cube004_1: THREE.Mesh
+    Cube004_2: THREE.Mesh
     Plane001: THREE.Mesh
     Plane001_1: THREE.Mesh
     Plane001_2: THREE.Mesh
     Plane003: THREE.Mesh
     Plane003_1: THREE.Mesh
     Plane003_2: THREE.Mesh
+    Cube005: THREE.Mesh
+    Cube005_1: THREE.Mesh
+    Cube005_2: THREE.Mesh
+    Cube006: THREE.Mesh
+    Cube006_1: THREE.Mesh
+    Cube006_2: THREE.Mesh
     wall: THREE.Mesh
     Plane: THREE.Mesh
-    lamp_post: THREE.Mesh
-    Cylinder001: THREE.Mesh
-    Cylinder001_1: THREE.Mesh
     wall001: THREE.Mesh
     wall002: THREE.Mesh
-    lamp_post001: THREE.Mesh
-    Cylinder003: THREE.Mesh
-    Cylinder003_1: THREE.Mesh
-    lamp_post002: THREE.Mesh
-    Cylinder005: THREE.Mesh
-    Cylinder005_1: THREE.Mesh
+    Cube011: THREE.Mesh
+    Cube011_1: THREE.Mesh
+    Cube013: THREE.Mesh
+    Cube013_1: THREE.Mesh
+    Cube014: THREE.Mesh
+    Cube014_1: THREE.Mesh
   }
   materials: {
     monitor: THREE.MeshPhysicalMaterial
@@ -42,8 +50,8 @@ type GLTFResult = GLTF & {
     vents: THREE.MeshStandardMaterial
     wall: THREE.MeshStandardMaterial
     ground: THREE.MeshStandardMaterial
-    lamp_post: THREE.MeshStandardMaterial
     light: THREE.MeshStandardMaterial
+    lamp_post: THREE.MeshStandardMaterial
   }
   animations: GLTFAction[]
 }
@@ -52,25 +60,20 @@ export function Model(props: JSX.IntrinsicElements['group']) {
   const group = React.useRef<THREE.Group>()
   const { nodes, materials, animations } = useGLTF('/street_scene.glb') as GLTFResult
   const { actions } = useAnimations(animations, group)
-
-  useEffect(() => {
-    Object.values(actions).forEach((action) => {
-      if (action) {
-        console.log(action)
-        action.enabled = true
-        action.reset()
-        action.setLoop(THREE.LoopRepeat, Infinity)
-        action.play()
-      }
-    })
-  }, [actions])
-
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <PerspectiveCamera name="Camera" makeDefault={false} far={100} near={0.1} fov={22.895} position={[3.327, 2.65, 15.28]} rotation={[0.044, 0.09, -0.004]} />
         <pointLight name="Spot" intensity={271757.065} decay={2} color="#ff2934" position={[-35.284, 4.4, 20.477]} scale={4.115} />
         <pointLight name="Spot001" intensity={271757.065} decay={2} color="#ffd66e" position={[-84.801, 4.4, 20.477]} scale={4.115} />
+        <Float floatIntensity={0.2}>
+          <group name="monitor001_1" position={[-3.734, 0, -7.13]}>
+            <mesh name="Cube004" geometry={nodes.Cube004.geometry} material={materials.monitor} />
+            <mesh name="Cube004_1" geometry={nodes.Cube004_1.geometry} material={materials['case']} />
+            <mesh name="Cube004_2" geometry={nodes.Cube004_2.geometry} material={materials.vents} />
+            <Text scale={0.5} position={[0, 1, 1]} color="limegreen">you</Text>
+          </group>
+        </Float>
         <group name="tower_1_1" position={[6.975, 0, -8.696]} scale={0.8}>
           <mesh name="Plane001" geometry={nodes.Plane001.geometry} material={materials.monitor} />
           <mesh name="Plane001_1" geometry={nodes.Plane001_1.geometry} material={materials['case']} />
@@ -81,31 +84,50 @@ export function Model(props: JSX.IntrinsicElements['group']) {
           <mesh name="Plane003_1" geometry={nodes.Plane003_1.geometry} material={materials['case']} />
           <mesh name="Plane003_2" geometry={nodes.Plane003_2.geometry} material={materials.vents} />
         </group>
+        <Float floatIntensity={0.2}>
+          <group name="monitor002" position={[-3.734, 3.815, -7.13]}>
+            <mesh name="Cube005" geometry={nodes.Cube005.geometry} material={materials.monitor} />
+            <mesh name="Cube005_1" geometry={nodes.Cube005_1.geometry} material={materials['case']} />
+            <mesh name="Cube005_2" geometry={nodes.Cube005_2.geometry} material={materials.vents} />
+            <Text scale={0.5} position={[0, 1, 1]} color="limegreen">there</Text>
+          </group>
+        </Float>
+        <Float floatIntensity={0.2}>
+          <group name="monitor003" position={[-3.734, 7.212, -7.13]}>
+            <mesh name="Cube006" geometry={nodes.Cube006.geometry} material={materials.monitor} />
+            <mesh name="Cube006_1" geometry={nodes.Cube006_1.geometry} material={materials['case']} />
+            <mesh name="Cube006_2" geometry={nodes.Cube006_2.geometry} material={materials.vents} />
+            <Text scale={0.5} position={[0, 1, 1]} color="limegreen">Hello</Text>
+             <Label position={[0, 0, 1]}>
+              Hello
+            </Label>
+          </group>
+        </Float>
         <mesh name="wall" geometry={nodes.wall.geometry} material={materials.wall} position={[14.524, 0, -9.251]} rotation={[-Math.PI, 0, 0]} scale={[-5.466, -1, -1]} />
         <mesh name="Plane" geometry={nodes.Plane.geometry} material={materials.ground} scale={21.872} />
-        <mesh name="lamp_post" geometry={nodes.lamp_post.geometry} material={materials.lamp_post} position={[5.993, 0, -0.291]}>
-          <group name="lamp_post_light" position={[-2.802, 6.722, -0.119]} rotation={[0.284, 0, -Math.PI / 2]} scale={[0.301, 0.69, 0.446]}>
-            <mesh name="Cylinder001" geometry={nodes.Cylinder001.geometry} material={materials.light} />
-            <mesh name="Cylinder001_1" geometry={nodes.Cylinder001_1.geometry} material={materials.lamp_post} />
-            <pointLight name="Area" intensity={108702.826} decay={2} color="#ffd895" position={[-0.185, 0.042, 0.109]} rotation={[-2.785, -1.564, -1.212]} scale={[1.45, 1.697, 3.262]} />
-          </group>
-        </mesh>
         <mesh name="wall001" geometry={nodes.wall001.geometry} material={materials.wall} position={[-14.491, 0, -9.251]} rotation={[-Math.PI, 0, 0]} scale={[-5.466, -1, -1]} />
         <mesh name="wall002" geometry={nodes.wall002.geometry} material={materials.wall} position={[-0.476, 0, -9.251]} rotation={[-Math.PI, 0, 0]} scale={[-5.466, -1, -1]} />
-        <mesh name="lamp_post001" geometry={nodes.lamp_post001.geometry} material={materials.lamp_post} position={[21.027, 0.074, -0.291]}>
-          <group name="lamp_post_light001" position={[-2.802, 6.722, -0.119]} rotation={[0.284, 0, -Math.PI / 2]} scale={[0.301, 0.69, 0.446]}>
-            <mesh name="Cylinder003" geometry={nodes.Cylinder003.geometry} material={materials.light} />
-            <mesh name="Cylinder003_1" geometry={nodes.Cylinder003_1.geometry} material={materials.lamp_post} />
-            <pointLight name="Area001_1" intensity={108702.826} decay={2} color="#ffd895" position={[-0.185, 0.042, 0.109]} rotation={[-2.785, -1.564, -1.212]} scale={[1.45, 1.697, 3.262]} />
-          </group>
-        </mesh>
-        <mesh name="lamp_post002" geometry={nodes.lamp_post002.geometry} material={materials.lamp_post} position={[-8.117, 0, -0.291]}>
-          <group name="lamp_post_light002" position={[-2.802, 6.722, -0.119]} rotation={[0.284, 0, -Math.PI / 2]} scale={[0.301, 0.69, 0.446]}>
-            <mesh name="Cylinder005" geometry={nodes.Cylinder005.geometry} material={materials.light} />
-            <mesh name="Cylinder005_1" geometry={nodes.Cylinder005_1.geometry} material={materials.lamp_post} />
-            <pointLight name="Area002" intensity={108702.826} decay={2} color="#ffd895" position={[-0.185, 0.042, 0.109]} rotation={[-2.785, -1.564, -1.212]} scale={[1.45, 1.697, 3.262]} />
-          </group>
-        </mesh>
+        <group name="lamp_post" position={[-6.925, 0, 8.237]} rotation={[0, Math.PI / 4, 0]} scale={0.248}>
+          <mesh name="Cube011" geometry={nodes.Cube011.geometry} material={materials.light} />
+          <mesh name="Cube011_1" geometry={nodes.Cube011_1.geometry} material={materials.lamp_post} />
+          <pointLight name="Point001" intensity={108702.826} decay={2} color="#ffd895" position={[4.397, 43.665, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point002" intensity={108702.826} decay={2} color="#ffd895" position={[2.856, 27.992, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point003_1" intensity={108702.826} decay={2} color="#ffd895" position={[-9.038, 35.474, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+        </group>
+        <group name="lamp_post001" position={[7.98, 0, 8.237]} rotation={[0, Math.PI / 4, 0]} scale={0.248}>
+          <mesh name="Cube013" geometry={nodes.Cube013.geometry} material={materials.light} />
+          <mesh name="Cube013_1" geometry={nodes.Cube013_1.geometry} material={materials.lamp_post} />
+          <pointLight name="Point004" intensity={108702.826} decay={2} color="#ffd895" position={[4.397, 43.665, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point005" intensity={108702.826} decay={2} color="#ffd895" position={[2.856, 27.992, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point006_1" intensity={108702.826} decay={2} color="#ffd895" position={[-9.038, 35.474, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+        </group>
+        <group name="lamp_post002" position={[-20.925, 0, 8.237]} rotation={[0, Math.PI / 4, 0]} scale={0.248}>
+          <mesh name="Cube014" geometry={nodes.Cube014.geometry} material={materials.light} />
+          <mesh name="Cube014_1" geometry={nodes.Cube014_1.geometry} material={materials.lamp_post} />
+          <pointLight name="Point007" intensity={108702.826} decay={2} color="#ffd895" position={[4.397, 43.665, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point008" intensity={108702.826} decay={2} color="#ffd895" position={[2.856, 27.992, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+          <pointLight name="Point009" intensity={108702.826} decay={2} color="#ffd895" position={[-9.038, 35.474, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={4.037} />
+        </group>
       </group>
     </group>
   )

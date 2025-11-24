@@ -4,9 +4,9 @@ Command: npx gltfjsx@6.5.3 public/street_scene.glb -t -o src/models/StreetScene.
 */
 
 import * as THREE from 'three'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useGLTF, PerspectiveCamera, useAnimations } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
+import { type GLTF } from 'three-stdlib'
 
 type ActionName = 'SpotAction' | 'SpotAction2'
 
@@ -16,6 +16,12 @@ interface GLTFAction extends THREE.AnimationClip {
 
 type GLTFResult = GLTF & {
   nodes: {
+    Plane001: THREE.Mesh
+    Plane001_1: THREE.Mesh
+    Plane001_2: THREE.Mesh
+    Plane003: THREE.Mesh
+    Plane003_1: THREE.Mesh
+    Plane003_2: THREE.Mesh
     wall: THREE.Mesh
     Plane: THREE.Mesh
     lamp_post: THREE.Mesh
@@ -31,6 +37,9 @@ type GLTFResult = GLTF & {
     Cylinder005_1: THREE.Mesh
   }
   materials: {
+    monitor: THREE.MeshPhysicalMaterial
+    ['case']: THREE.MeshStandardMaterial
+    vents: THREE.MeshStandardMaterial
     wall: THREE.MeshStandardMaterial
     ground: THREE.MeshStandardMaterial
     lamp_post: THREE.MeshStandardMaterial
@@ -43,14 +52,34 @@ export function Model(props: JSX.IntrinsicElements['group']) {
   const group = React.useRef<THREE.Group>()
   const { nodes, materials, animations } = useGLTF('/street_scene.glb') as GLTFResult
   const { actions } = useAnimations(animations, group)
+
+  useEffect(() => {
+    Object.values(actions).forEach((action) => {
+      if (action) {
+        action.enabled = true
+        action.reset()
+        action.setLoop(THREE.LoopRepeat, Infinity)
+        action.play()
+      }
+    })
+  }, [actions])
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
-        <group name="tower_1_1" position={[6.975, 0, -8.696]} scale={0.8} />
-        <group name="tower_1001_1" position={[-7.43, 0, -8.363]} scale={0.781} />
         <PerspectiveCamera name="Camera" makeDefault={false} far={100} near={0.1} fov={22.895} position={[3.327, 2.65, 15.28]} rotation={[0.044, 0.09, -0.004]} />
         <pointLight name="Spot" intensity={271757.065} decay={2} color="#ff2934" position={[-35.284, 4.4, 20.477]} scale={4.115} />
         <pointLight name="Spot001" intensity={271757.065} decay={2} color="#ffd66e" position={[-84.801, 4.4, 20.477]} scale={4.115} />
+        <group name="tower_1_1" position={[6.975, 0, -8.696]} scale={0.8}>
+          <mesh name="Plane001" geometry={nodes.Plane001.geometry} material={materials.monitor} />
+          <mesh name="Plane001_1" geometry={nodes.Plane001_1.geometry} material={materials['case']} />
+          <mesh name="Plane001_2" geometry={nodes.Plane001_2.geometry} material={materials.vents} />
+        </group>
+        <group name="tower_1001_1" position={[-7.43, 0, -8.363]} scale={0.781}>
+          <mesh name="Plane003" geometry={nodes.Plane003.geometry} material={materials.monitor} />
+          <mesh name="Plane003_1" geometry={nodes.Plane003_1.geometry} material={materials['case']} />
+          <mesh name="Plane003_2" geometry={nodes.Plane003_2.geometry} material={materials.vents} />
+        </group>
         <mesh name="wall" geometry={nodes.wall.geometry} material={materials.wall} position={[14.524, 0, -9.251]} rotation={[-Math.PI, 0, 0]} scale={[-5.466, -1, -1]} />
         <mesh name="Plane" geometry={nodes.Plane.geometry} material={materials.ground} scale={21.872} />
         <mesh name="lamp_post" geometry={nodes.lamp_post.geometry} material={materials.lamp_post} position={[5.993, 0, -0.291]}>

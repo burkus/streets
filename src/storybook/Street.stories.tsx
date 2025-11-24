@@ -3,7 +3,7 @@ import { Model } from '../models/StreetScene.tsx'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useRef } from "react";
 import * as THREE from 'three'
-import { CameraControls, Html } from "@react-three/drei";
+import { CameraControls } from "@react-three/drei";
 import { List, MenuItemText } from "../components/styles.ts";
 
 const isLight = (obj: any): obj is THREE.Light => obj.isLight
@@ -36,17 +36,16 @@ const Component = () => {
       camera={{ position: [0, 0, 5] }}
       shadows='basic'
     >
-      {/* <fog attach="fog" args={['black', 5, 30]} /> */}
       <color attach="background" args={['black']} />
       <Scene />
       <CameraControls />
-      <Html occlude transform position={[-2, 5, -5]}>
+      {/* <Html occlude transform position={[-2, 5, -5]}>
         <List>
           {Array.from({ length: 5 }).map((_, i) => (
             <MenuItemText>Menu Item {i + 1}</MenuItemText>
           ))}
         </List>
-      </Html>
+      </Html> */}
     </Canvas>
   )
 }
